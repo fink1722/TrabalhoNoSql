@@ -12,9 +12,9 @@ def criar_tarefa(titulo, descricao, tags=[]):
         "comentarios": []
     }
     
-    resultado = colecao_tarefas.insert_one(tarefa)
-    print(f"Tarefa criada com ID: {resultado.inserted_id}")
-    return resultado.inserted_id
+    m = colecao_tarefas.insert_one(tarefa)
+    print(f"Tarefa criada com ID: {m.inserted_id}")
+    return m.inserted_id
 
 def buscar_por_id(id):
     tarefa = colecao_tarefas.find_one({"_id": ObjectId(id)})
@@ -46,3 +46,14 @@ def adicionar_comentario(id, texto):
         "texto": texto,
         "data": datetime.now()
     }
+    m = colecao_tarefas.update_one(
+        {"_id": ObjectId(id)},
+        {"$push": {"comentarios": comentario}}
+    )
+    print(f"Comentarios adicionados: {m.modified_count}")
+    return m.modified_count
+
+def deletar_tarefa(id):
+    m = colecao_tarefas.delete_one({"_id": ObjectId(id)})
+    print(f"Tarefa deletada: {m.deleted_count}")
+    return m.deleted_count
