@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-url = 
+url = ""
 
 
 
